@@ -1,0 +1,4 @@
+{
+    "dockerhub-id" : "mazh4ng/dsc180b",
+    "build-script" : "python run.py"
+}
