@@ -9,8 +9,8 @@ from src.models import train_model
 from src.visualizations import visualize
 
 
-def main(targets):
-    if "test" in targets:
+def main(args):
+    if "test" in args:
         if not os.path.exists("data/temp"):
             os.makedirs("data/temp")
         if not os.path.exists("data/out"):
@@ -23,6 +23,6 @@ def main(targets):
 
 if __name__ == "__main__":
     # python run.py test
-    targets = sys.argv[1:]
-    main(targets)
+    args = sys.argv[1:]
+    main(args)
     #generates graph in final_figure.png
