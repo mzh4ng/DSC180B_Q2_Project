@@ -21,11 +21,10 @@ def plot_confidence_interval(x, values, z=1.96, color='#2187bb', horizontal_line
 
     return mean, confidence_interval
 
-def init_visualization(cancer_types):
+def init_visualization(cancer_stages):
     ## INITIALIZE PLOT ##
     fig = plt.figure()
     y_ticks = plt.yticks(np.arange(11)/10)
-    x_ticks = plt.xticks(np.arange(1, len(cancer_types.columns)+1), [abbreviate(cancer) for cancer in cancer_types.columns])
+    x_ticks = plt.xticks(np.arange(1, len(cancer_stages.columns)+1), [stage for stage in cancer_stages.columns])
     plt.autoscale(False)
     title = plt.title('AUROC')
-    return

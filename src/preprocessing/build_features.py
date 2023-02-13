@@ -20,6 +20,6 @@ def relevant_feature_data(fungi_metadata, feature_table):
     # filter feature tables for relevant samples
     return feature_table.filter(items = fungi_metadata.index, axis = 0)
 
-def disease_type_count(fungi_metadata):
+def OHE_col(col):
     # one hot encode disease types
-    return pd.get_dummies(fungi_metadata['disease_type'])
+    return pd.get_dummies(col)
