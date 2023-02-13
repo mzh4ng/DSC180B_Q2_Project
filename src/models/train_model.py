@@ -1,7 +1,10 @@
 from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import KFold
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.linear_model import Lasso
 from sklearn.metrics import precision_recall_curve, average_precision_score, auc
 from sklearn.metrics import roc_auc_score
+from sklearn.metrics import mean_squared_error
 
 import numpy as np
 
@@ -60,3 +63,40 @@ def train_classify_cancer_stages(dataset, cancer_stages):
         total_aupr_data[stage] = aupr_plt_data
 
     return clf, total_auroc_data, total_aupr_data
+
+
+def train_regression(X, y):
+    '''Take in as input the cleaned datasets of the features(X) and the one-hot encoded cancer stages/targets(Y)
+       then perform 10-fold validation split and use them to train the model.
+
+       Output: Auroc and Aupr scores of the model
+
+    '''
+
+    # TODO: define cross validation hyperparams
+    n_splits = 10
+    skf_random = 0  # DO NOT TOUCH
+    shuffle = True
+    # TODO: define model hyperparams
+    alpha = 0.01
+
+    skf = KFold(n_splits=n_splits, random_state=skf_random, shuffle=shuffle)
+
+    reg = Lasso(alpha)
+
+    print("Starting Days to Die Regression . . .")
+
+    mses = np.array([])
+
+    for train_index, val_index in skf.split(X, y):
+        train_X, train_y = X.iloc[train_index], y.iloc[train_index]
+        val_X, val_y = X.iloc[val_index], y.iloc[val_index]
+
+        reg.fit(train_X, train_y)  # re-fit model
+
+        preds = reg.predict(val_X)  # predict
+
+        mse = mean_squared_error(val_y, preds)
+        mses = np.append(mses, mse)
+
+    return reg, mses

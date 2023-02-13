@@ -51,7 +51,28 @@ def main(args):
             visualize.plot_confidence_interval(i, auroc_plt_data[stage])
             i += 1
 
-        return model, auroc_plt_data, aupr_plt_data
+        return model, (auroc_plt_data, aupr_plt_data)
+
+    if "dtd" in args:
+        dtd = "days_to_death"
+
+        metadata = data_cleaning.filter_metadata(metadata)
+        counts = counts.loc[metadata.index]
+
+        Y = metadata[dtd]
+        # X = metadata.drop(cancer_stage, axis=1)
+        # X = X.replace(np.nan, "NAN")
+        # X = preprocessing.preprocess_metadata(X)
+        # X = pd.merge(X, counts, on="sampleid", how="inner")
+
+        print("Training Model Now . . .")
+        model, mses = train_model.train_regression(counts, Y)
+
+        # TODO: visualize MSEs
+
+        print("Average MSE for Days to Die Regression:" + str(np.mean(mses)))
+
+        return model, mses
 
 if __name__ == "__main__":
     # args:
