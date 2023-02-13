@@ -35,6 +35,7 @@ def train_classify_cancer_stages(dataset, cancer_stages):
     total_aupr_data = {}
 
     for i, stage in enumerate(cancer_stages.columns, start=1):
+        print("Starting Cancer Stage: " + stage)
         X = dataset
         y = cancer_stages[stage]
 
@@ -45,7 +46,6 @@ def train_classify_cancer_stages(dataset, cancer_stages):
             train_X, train_y = X.iloc[train_index], y.iloc[train_index]
             val_X, val_y = X.iloc[val_index], y.iloc[val_index]
 
-            print(train_X)
             clf.fit(train_X, train_y)  # re-fit model
 
             preds = clf.predict_proba(val_X)[:, 1]  # predict, probability of positive class predict

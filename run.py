@@ -17,6 +17,7 @@ def main(args):
     if "test" in args:
         metadata_filename = "data/test/test_metadata.tsv"
         counts_filename = "data/test/test_fungi.tsv"
+        print("Using Test Data.")
     else:
         counts_filename = 'data/count_data_species_raw_WIS_overlapping_fungi_bacteria_12773samples.tsv'
         metadata_filename = 'data/metadata_species_WIS_overlapping_fungi_bacteria_12773samples.tsv'
@@ -32,6 +33,8 @@ def main(args):
         cancer_stage = "pathologic_stage_label"
         # clean cancer stage column s.t. only stages I, II, III, and IV remain
         metadata[cancer_stage] = data_cleaning.reduce_stages(metadata[cancer_stage])
+        metadata = metadata[metadata.pathologic_stage_label.isin(["Stage I", "Stage II", "Stage III", "Stage IV"])]
+        counts = counts.loc[metadata.index]
 
         Y = build_features.OHE_col(metadata[cancer_stage])
         #X = metadata.drop(cancer_stage, axis=1)
@@ -39,10 +42,16 @@ def main(args):
         #X = preprocessing.preprocess_metadata(X)
         #X = pd.merge(X, counts, on="sampleid", how="inner")
 
+        print("Training Model Now . . .")
         model, auroc_plt_data, aupr_plt_data = train_model.train_classify_cancer_stages(counts, Y)
 
         visualize.init_visualization(Y)
-        visualize.plot_confidence_interval(auroc_plt_data.keys(), auroc_plt_data)
+        i = 1
+        for stage in auroc_plt_data.keys():
+            visualize.plot_confidence_interval(i, auroc_plt_data[stage])
+            i += 1
+
+        return model, auroc_plt_data, aupr_plt_data
 
 if __name__ == "__main__":
     # args:
@@ -52,5 +61,3 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     main(args)
     #generates graph in final_figure.png
-
-main("cs")
