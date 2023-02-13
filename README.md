@@ -1,4 +1,4 @@
-# 
+# Evaluating Fungal Feature Importance in Predicting Life Expectancy for Cancer Patients
 This is the repository for DSC180B Section B18-1's Project consisting of Benjamin Sacks, Ethan Chan, and Mark Zheng.
 This project is an extension of a study on the classification of cancer types using fungal mycobiome counts which can
 be found here: https://www.cell.com/cell/fulltext/S0092-8674(22)01127-8.
