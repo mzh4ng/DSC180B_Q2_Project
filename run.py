@@ -37,13 +37,12 @@ def main(args):
         counts = counts.loc[metadata.index]
 
         Y = build_features.OHE_col(metadata[cancer_stage])
-        #X = metadata.drop(cancer_stage, axis=1)
-        #X = X.replace(np.nan, "NAN")
-        #X = preprocessing.preprocess_metadata(X)
-        #X = pd.merge(X, counts, on="sampleid", how="inner")
+        X = metadata.drop(cancer_stage, axis=1)
+        X = preprocessing.preprocess_metadata(X)
+        X = pd.merge(X, counts, on="sampleid", how="inner")
 
         print("Training Model Now . . .")
-        model, auroc_plt_data, aupr_plt_data = train_model.train_classify_cancer_stages(counts, Y)
+        model, auroc_plt_data, aupr_plt_data = train_model.train_classify_cancer_stages(X, Y)
 
         visualize.init_visualization(Y)
         i = 1

@@ -30,6 +30,7 @@ from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 
 ohe_feats = [           'experimental_strategy', 'gender', 'race', 'ethnicity', 'disease_type', 'primary_site',
                         'reference_genome', 'data_submitting_center_label', 'investigation', 'country_of_sample_procurement', 
@@ -60,10 +61,13 @@ def preprocess_metadata(df):
     transformed = ct.fit_transform(df)
 
     column_names = (
-        ct.named_transformers_["onehotencoder"].get_feature_names().tolist()
+        ct.named_transformers_["onehotencoder"].get_feature_names_out().tolist()
         + ordinal_feats
         + scaler_feats
         + passthrough_feats
     )
 
-    return pd.DataFrame(transformed, columns=column_names, index=df.index)
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    imputed = imputer.fit_transform(transformed)
+
+    return pd.DataFrame(imputed, columns=column_names, index=df.index)
