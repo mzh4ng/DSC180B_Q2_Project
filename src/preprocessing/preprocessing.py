@@ -45,7 +45,7 @@ drop_feats = [          'sample_name', 'run_prefix', 'cgc_base_name',
 
 def preprocess_metadata(df):
     ct = make_column_transformer(
-            (OneHotEncoder(sparse=False), ohe_feats + ordinal_feats),
+        (OneHotEncoder(sparse=False), ohe_feats + ordinal_feats),
         (StandardScaler(), scaler_feats),
         ("passthrough", passthrough_feats),
         ("drop", drop_feats),
@@ -54,9 +54,9 @@ def preprocess_metadata(df):
     transformed = ct.fit_transform(df)
 
     column_names = (
-        scaler_feats
-        + passthrough_feats    
-        + ct.named_transformers_["onehotencoder"].get_feature_names().tolist()
+        ct.named_transformers_["onehotencoder"].get_feature_names().tolist()
+        + scaler_feats
+        + passthrough_feats
     )
 
     return pd.DataFrame(transformed, columns=column_names, index=df.index)
