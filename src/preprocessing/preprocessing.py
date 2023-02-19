@@ -22,6 +22,7 @@
 # PlateCenter                    - numerical
 # PlateCenterFlag                - ohe
 
+import numpy as np
 import pandas as pd
 
 from sklearn.compose import ColumnTransformer
@@ -44,8 +45,13 @@ drop_feats = [          'sample_name', 'run_prefix', 'cgc_base_name',
                         'tcga_case_id', 'knightlabID', 'portion_is_ffpe', 'PlateCenter']
 
 def preprocess_metadata(df):
+
+    # Fill np.nan in ordinal columns (OrdinalEncoder doesn't work otherwise)
+    df[ordinal_feats] = df[ordinal_feats].fillna('None')
+
     ct = make_column_transformer(
-        (OneHotEncoder(sparse=False), ohe_feats + ordinal_feats),
+        (OneHotEncoder(sparse=False), ohe_feats),
+        (OrdinalEncoder(), ordinal_feats),
         (StandardScaler(), scaler_feats),
         ("passthrough", passthrough_feats),
         ("drop", drop_feats),
@@ -55,6 +61,7 @@ def preprocess_metadata(df):
 
     column_names = (
         ct.named_transformers_["onehotencoder"].get_feature_names().tolist()
+        + ordinal_feats
         + scaler_feats
         + passthrough_feats
     )
