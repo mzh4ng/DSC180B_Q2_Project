@@ -27,12 +27,13 @@ def main(args):
     raw_metadata = make_dataset.read_fungi_data(metadata_filename)
 
     metadata = raw_metadata.replace('Not available', np.nan)
+    for col in ['pathologic_t_label', 'pathologic_n_label', 'pathologic_stage_label']:
+        metadata[col] = data_cleaning.reduce_stages(metadata[col])
 
     if "cs" in args:
         # name of cancer stage column
         cancer_stage = "pathologic_stage_label"
         # clean cancer stage column s.t. only stages I, II, III, and IV remain
-        metadata[cancer_stage] = data_cleaning.reduce_stages(metadata[cancer_stage])
         metadata = metadata[metadata.pathologic_stage_label.isin(["Stage I", "Stage II", "Stage III", "Stage IV"])]
         counts = counts.loc[metadata.index]
 
