@@ -1,5 +1,9 @@
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import pandas as pd
 
 def abbreviate(string, tcga_abbrev):
     abbr = tcga_abbrev.loc[string][0]
@@ -31,6 +35,33 @@ def init_visualization(cancer_stages):
     x_ticks = plt.xticks(np.arange(1, len(cancer_stages.columns)+1), [stage for stage in cancer_stages.columns])
     plt.autoscale(False)
     title = plt.title('AUROC')
+
+def create_pca(data, targets):
+    # Standardize data
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data)
+
+    # Run PCA
+    pca = PCA(n_components=2)
+    pca_data = pca.fit_transform(scaled_data)
+
+    # Convert ndarray to DataFrame, Add targets back in
+    pca_data = pd.DataFrame(pca_data, index=data.index)
+    pca_data = pd.merge(pca_data, targets, on="sampleid", how="inner")
+
+    # Plot PCA and save
+    sns.scatterplot(0, 1, data=pca_data, hue='pathologic_stage_label')
+    plt.savefig("PCA.png")
+
+    # Get loading scores from both PC's
+    pc1_loading_scores = pd.Series(pca.components_[0], index=data.columns)
+    pc2_loading_scores = pd.Series(pca.components_[1], index=data.columns)
+    
+    # Sort loading scores by magnitude
+    pc1_loading_scores = pc1_loading_scores.abs().sort_values(ascending=False)
+    pc2_loading_scores = pc2_loading_scores.abs().sort_values(ascending=False)
+
+    return pc1_loading_scores, pc2_loading_scores
 
 
 # TODO: Rewrite this function to fit our project
