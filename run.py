@@ -94,7 +94,7 @@ def main(args):
         # merge counts data to metadata (drop any counts missing from index in metadata)
         data = pd.merge(metadata, counts, on="sampleid", how="left")
 
-        pca = visualize.create_pca(counts, targets)
+        pca = visualize.create_pca(metadata, targets)
 
         print()
         print("----  PC1 Loading Scores:  ----")
