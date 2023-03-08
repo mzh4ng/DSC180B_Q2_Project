@@ -51,7 +51,7 @@ def preprocess_metadata(df):
     df[ordinal_feats] = df[ordinal_feats].fillna('None')
 
     ct = make_column_transformer(
-        (OneHotEncoder(sparse=False), ohe_feats),
+        (OneHotEncoder(sparse_output=False), ohe_feats),
         (OrdinalEncoder(), ordinal_feats),
         (StandardScaler(), scaler_feats),
         ("passthrough", passthrough_feats),

@@ -94,37 +94,14 @@ def main(args):
         # merge counts data to metadata (drop any counts missing from index in metadata)
         data = pd.merge(metadata, counts, on="sampleid", how="left")
 
-        visualize.create_pca(data, targets)
+        pca = visualize.create_pca(counts, targets)
 
-        # scale data for pca
-        # from sklearn.preprocessing import StandardScaler
-        # scaler = StandardScaler()
-        # scaled_data = scaler.fit_transform(data)
-
-        # pca (duh)
-        # from sklearn.decomposition import PCA
-        # pca = PCA(n_components=2)
-        # data_pca = pca.fit_transform(scaled_data)
-
-        # convert numpy array output to DataFrame, add cancer stage back in
-        # data_pca = pd.DataFrame(data_pca, index=data.index)
-        # data_pca = pd.merge(data_pca, cancer_stages["pathologic_stage_label"], on="sampleid", how="inner")
-
-        # ## first, get the loading scores
-        # loading_scores = pd.Series(pca.components_[0], index=data.columns)
-        # ## now sort the loading scores based on their magnitude
-        # sorted_loading_scores = loading_scores.abs().sort_values(ascending=False)
-        # # get the names of the top 10 genes
-        # top_10_genes = sorted_loading_scores[0:10].index.values   
-        # # print the gene names and their scores (and +/- sign)
-        # print(loading_scores[top_10_genes])
-
-        # # plot that shiii
-        # import matplotlib.pyplot as plt
-        # import seaborn as sns
-        # sns.scatterplot(0, 1, data=data_pca, hue='pathologic_stage_label')
-        # plt.show()
-
+        print()
+        print("----  PC1 Loading Scores:  ----")
+        print(pca[0][:10])
+        print()
+        print("----  PC2 Loading Scores:  ----")
+        print(pca[0][:10])
 
 
 if __name__ == "__main__":
