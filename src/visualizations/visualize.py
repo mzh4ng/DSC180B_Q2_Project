@@ -48,7 +48,7 @@ def create_pca(data, targets):
 
     # # Run PCA
     # ## Standardize data
-    # scaler = StandardScaler()
+    # scaler = StandardScaler() 
     # scaled_data = scaler.fit_transform(data)
     # ## Run sklearn PCA on data
     # pca = PCA(n_components=2)
