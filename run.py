@@ -90,6 +90,8 @@ def main(args):
 
         # preprocess metadata
         metadata = preprocessing.preprocess_metadata(metadata)
+        metadata = metadata.iloc[:, :-7]
+        metadata.to_csv('temp.csv')
 
         # merge counts data to metadata (drop any counts missing from index in metadata)
         data = pd.merge(metadata, counts, on="sampleid", how="left")

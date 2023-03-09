@@ -37,13 +37,22 @@ def init_visualization(cancer_stages):
     title = plt.title('AUROC')
 
 def create_pca(data, targets):
-    # Run PCA
-    ## Standardize data
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(data)
-    ## Run sklearn PCA on data
-    pca = PCA(n_components=2)
-    pca_data = pca.fit_transform(scaled_data)
+    # Run MDS
+    ## 
+    from sklearn.metrics import pairwise_distances
+    from sklearn.manifold import MDS
+
+    distances = pairwise_distances(data, metric='jaccard')
+    mds = MDS(dissimilarity='precomputed', random_state=0)
+    pca_data = mds.fit_transform(distances)
+
+    # # Run PCA
+    # ## Standardize data
+    # scaler = StandardScaler()
+    # scaled_data = scaler.fit_transform(data)
+    # ## Run sklearn PCA on data
+    # pca = PCA(n_components=2)
+    # pca_data = pca.fit_transform(scaled_data)
     ## Convert ndarray to DataFrame, Add targets back in
     pca_data = pd.DataFrame(pca_data, index=data.index)
     pca_data = pd.merge(pca_data, targets, on="sampleid", how="inner")
