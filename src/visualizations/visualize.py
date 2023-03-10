@@ -36,38 +36,54 @@ def init_visualization(cancer_stages):
     plt.autoscale(False)
     title = plt.title('AUROC')
 
-def create_pca(data, targets):
-    # Run MDS
-    ## 
-    from sklearn.metrics import pairwise_distances
-    from sklearn.manifold import MDS
+def create_pca(data, targets, target_column):
+    # idx = np.random.permutation(data.index)
+    # data = data.reindex(idx)[:500]
+    # targets = targets.reindex(idx)[:500]
+    # # Run MDS
+    # ## 
+    # from sklearn.metrics import pairwise_distances
+    # from sklearn.manifold import MDS
 
-    distances = pairwise_distances(data, metric='jaccard')
-    mds = MDS(dissimilarity='precomputed', random_state=0)
-    pca_data = mds.fit_transform(distances)
+    # import warnings
+    # from sklearn.exceptions import DataConversionWarning
+    # warnings.filterwarnings(action='ignore', category=DataConversionWarning)
 
-    # # Run PCA
-    # ## Standardize data
-    # scaler = StandardScaler() 
-    # scaled_data = scaler.fit_transform(data)
-    # ## Run sklearn PCA on data
-    # pca = PCA(n_components=2)
-    # pca_data = pca.fit_transform(scaled_data)
-    ## Convert ndarray to DataFrame, Add targets back in
+    # distance_metric = 'jaccard'
+
+    # distances = pairwise_distances(data.to_numpy(), metric=distance_metric)
+    # pd.DataFrame(distances).to_csv('distances.csv')
+    # mds = MDS(dissimilarity='precomputed', random_state=0, normalized_stress=False)
+    # pca_data = mds.fit_transform(distances)
+
+    # Run PCA
+    ## Standardize data
+    scaler = StandardScaler() 
+    scaled_data = scaler.fit_transform(data)
+    ## Run sklearn PCA on data
+    pca = PCA(n_components=2)
+    pca_data = pca.fit_transform(scaled_data)
+    # Convert ndarray to DataFrame, Add targets back in
     pca_data = pd.DataFrame(pca_data, index=data.index)
     pca_data = pd.merge(pca_data, targets, on="sampleid", how="inner")
 
     # Plot PCA
     ## Create scatterplot
+
     sns.scatterplot(x=0, y=1, data=pca_data, 
-                    hue='pathologic_stage_label',
-                    alpha=0.25)
+                    hue=target_column,
+                    alpha=0.3)
     plt.title("PCoA")
+    plt.legend(bbox_to_anchor=(1.01, 1), 
+               loc=2, 
+               borderaxespad=0.,
+               title=target_column)
     ## Format PC labels to include explained variance
     plt.xlabel(f'PC1 ({round(pca.explained_variance_[0], 2)}%)')
     plt.ylabel(f'PC2 ({round(pca.explained_variance_[1], 2)}%)')
     ## Save fig
-    plt.savefig("PCA.png")
+    plt.savefig("figures\pca\PCA_" + target_column + ".png", bbox_inches='tight')
+
 
     # Return loading scores
     ## Get loading scores from both PC's

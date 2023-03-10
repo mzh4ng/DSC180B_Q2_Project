@@ -75,35 +75,39 @@ def main(args):
         return model, mses
     
     if "pca" in args:
+        target_column = sys.argv[2]
+
         stages = ['Stage I', 'Stage II', 'Stage III', 'Stage IV']
 
         # filter out missing stage data
         metadata = metadata[metadata.pathologic_stage_label.isin(["Stage I", "Stage II", "Stage III", "Stage IV"])]
+
+        # filter to one experimental strategy
+        metadata = metadata[metadata.experimental_strategy == 'WGS']
 
         # order by cancer stage
         metadata['pathologic_stage_label'] = pd.Categorical(metadata['pathologic_stage_label'], categories = stages)
         metadata = metadata.sort_values(by = 'pathologic_stage_label')
 
         # remove cancer stage from pca (keep for coloring plot later)
-        targets = metadata[['pathologic_stage_label']]
-        metadata.drop('pathologic_stage_label', axis = 1)
+        targets = metadata[[target_column]]
+        metadata.drop(target_column, axis = 1)
 
         # preprocess metadata
         metadata = preprocessing.preprocess_metadata(metadata)
         metadata = metadata.iloc[:, :-7]
-        metadata.to_csv('temp.csv')
 
         # merge counts data to metadata (drop any counts missing from index in metadata)
         data = pd.merge(metadata, counts, on="sampleid", how="left")
 
-        pca = visualize.create_pca(metadata, targets)
+        pca = visualize.create_pca(metadata, targets, target_column)
 
-        print()
-        print("----  PC1 Loading Scores:  ----")
-        print(pca[0][:10])
-        print()
-        print("----  PC2 Loading Scores:  ----")
-        print(pca[0][:10])
+        # print()
+        # print("----  PC1 Loading Scores:  ----")
+        # print(pca[0][:5])
+        # print()
+        # print("----  PC2 Loading Scores:  ----")
+        # print(pca[0][:5])
 
 
 if __name__ == "__main__":
