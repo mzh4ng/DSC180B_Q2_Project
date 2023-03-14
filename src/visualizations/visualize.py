@@ -1,22 +1,27 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
 import pandas as pd
 import os
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
+# Default font family for graphs
 font = {'family': 'DejaVu Sans',
         'weight': 'bold',
         'size': 15}
 
 
 def make_folder(name):
+    """
+    """
     if not os.path.exists(name):
         os.makedirs(name)
 
 
 def plot_classification(config, auroc, aupr):
+    """
+    """
     folder = "figures/" + config["experiment_name"]
     title = config["experiment_title"]
     make_folder(folder)
@@ -26,13 +31,18 @@ def plot_classification(config, auroc, aupr):
 
 
 def plot_regression(config, mses):
+    """
+    """
     folder = "figures/" + config["experiment_name"]
     title = config["experiment_title"]
+    make_folder(folder)
     file = folder + "/" + config["experiment_name"]
     plot_boxplot(title + " MSE", file + "_MSE.png", mses)
 
 
 def plot_boxplot(title, file_name, data_dict):
+    """
+    """
     data = list(data_dict.values())
     ticks = list(data_dict.keys())
 
@@ -46,36 +56,9 @@ def plot_boxplot(title, file_name, data_dict):
     return plt
 
 
-def plot_confidence_interval(x, values, z=1.96, color='#2187bb', horizontal_line_width=0.25):
-    mean = np.mean(values)
-    stdev = np.std(values)
-    confidence_interval = z * stdev / (len(values) ** (1 / 2))
-
-    left = x - horizontal_line_width / 2
-    top = mean - confidence_interval
-    right = x + horizontal_line_width / 2
-    bottom = mean + confidence_interval
-    plt.plot([x, x], [top, bottom], color=color)
-    plt.plot([left, right], [top, top], color=color)
-    plt.plot([left, right], [bottom, bottom], color=color)
-    plt.plot(x, mean, 'o', color=color)
-
-    # TODO: Delete this when plot_model_metrics() is rewritten
-    plt.savefig('final_figure.png')
-
-    return mean, confidence_interval
-
-
-def init_visualization(cancer_stages):
-    # INITIALIZE PLOT
-    fig = plt.figure()
-    y_ticks = plt.yticks(np.arange(11) / 10)
-    x_ticks = plt.xticks(np.arange(1, len(cancer_stages.columns) + 1), [stage for stage in cancer_stages.columns])
-    plt.autoscale(False)
-    title = plt.title('AUROC')
-
-
 def create_pca(data, targets, target_column):
+    """
+    """
     # idx = np.random.permutation(data.index)
     # data = data.reindex(idx)[:500]
     # targets = targets.reindex(idx)[:500]

@@ -2,6 +2,8 @@ import pandas as pd
 
 
 def filter_metadata(df):
+    """
+    """
     df = df[df['days_to_death'] < 10_000]  # Drop NaN's & outliers
     df = df[
         (df['analyte_A260A280Ratio'] > 0) | (df['analyte_A260A280Ratio'].isna())]  # Drop strange values / Keep NaN's

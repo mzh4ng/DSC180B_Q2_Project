@@ -8,11 +8,6 @@ from sklearn.metrics import average_precision_score, roc_auc_score, mean_squared
 
 def train_classification(config, X, Y):
     """
-    Take in as input the cleaned datasets of the features(X) and the one-hot encoded cancer stages/targets(Y)
-           then perform 10-fold validation split and use them to train the model.
-
-           Output: Auroc and Aupr scores of the model
-
     """
     # cross validation hyperparams
     n_splits = config["model"]["k-folds"]["n_splits"]
@@ -71,11 +66,6 @@ def train_classification(config, X, Y):
 
 def train_regression(config, X, y):
     """
-    Take in as input the cleaned datasets of the features(X) and the one-hot encoded cancer stages/targets(Y)
-    then perform 10-fold validation split and use them to train the model.
-
-    Output: Auroc and Aupr scores of the model
-
     """
 
     # cross validation hyperparams
