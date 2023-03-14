@@ -128,6 +128,7 @@ def main(config):
     if config["experiment_type"] == "regression":
         model, mses = train_model.train_regression(config, X, Y)
         visualize.plot_regression(config, mses)
+    print("Task Completed.")
 
 
 if __name__ == "__main__":

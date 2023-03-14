@@ -1,0 +1,42 @@
+{
+  "experiment_name": "default-days-to-death-test",
+  "experiment_title": "Days to Death Regression",
+  "experiment_type": "regression",
+  "save_model": true,
+  "overwrite_save": true,
+  "dataset": {
+    "metadata_file_path": "data/test/test_metadata.tsv",
+    "counts_file_path": "data/test/test_fungi.tsv",
+    "metadata_id_col": "dz",
+    "counts_id_col": "sampleid",
+    "y_col": "days_to_death"
+  },
+  "preprocessing": {
+    "do_preprocessing": true,
+    "y_col_OHE": true,
+    "reduce_cancer_stage_cols": ["pathologic_stage_label", "pathologic_t_label", "pathologic_n_label"],
+    "one_hot_encode_cols": [
+      "experimental_strategy", "gender", "race", "ethnicity", "disease_type", "primary_site",
+      "reference_genome", "data_submitting_center_label", "investigation", "PlateCenterFlag",
+      "country_of_sample_procurement", "pathologic_n_label", "sample_type", "pathologic_t_label",
+      "pathologic_stage_label"
+    ],
+    "ordinal_cols": ["tissue_source_site_label", "histological_diagnosis_label"],
+    "scaler_cols": ["analyte_amount", "analyte_A260A280Ratio", "aliquot_concentration"],
+    "passthrough_cols": ["age_at_diagnosis"],
+    "drop_cols": [
+      "sample_name", "run_prefix", "cgc_base_name", "pathologic_t_label", "filename",
+      "cgc_id", "cgc_filename", "vital_status", "data_subtype", "tcga_sample_id", "cgc_case_uuid",
+      "cgc_platform", "gdc_file_uuid", "cgc_sample_uuid", "portion_is_ffpe", "cgc_aliquot_uuid",
+      "tcga_aliquot_id", "PlateCenter", "tcga_case_id", "knightlabID"
+    ],
+    "impute_strat": "mean"
+  },
+  "model": {
+    "k-folds": {
+      "n_splits": 10,
+      "shuffle": true
+    },
+    "alpha": 0.1
+  }
+}

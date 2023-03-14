@@ -67,14 +67,14 @@ def preprocess_metadata(config, df):
 
     column_names = (
             ct.named_transformers_["onehotencoder"].get_feature_names_out().tolist()
-            + ordinal_feats
-            + scaler_feats
-            + passthrough_feats
+            + config["preprocessing"]["ordinal_cols"]
+            + config["preprocessing"]["scaler_cols"]
+            + config["preprocessing"]["passthrough_cols"]
     )
 
     imputer = SimpleImputer(missing_values=np.nan, strategy=config["preprocessing"]["impute_strat"])
     imputed = imputer.fit_transform(transformed)
-
+    
     return pd.DataFrame(imputed, columns=column_names, index=df.index)
 
 

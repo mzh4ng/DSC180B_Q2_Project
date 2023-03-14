@@ -92,7 +92,9 @@ def train_regression(config, X, y):
 
     reg = Lasso(alpha)
 
-    mses = np.array([])
+    scores = {}
+
+    scores["MSE"] = np.array([])
 
     for train_index, val_index in skf.split(X, y):
         train_X, train_y = X.iloc[train_index], y.iloc[train_index]
@@ -106,6 +108,6 @@ def train_regression(config, X, y):
 
         # record Mean Squared Errors
         mse = mean_squared_error(val_y, preds)
-        mses = np.append(mses, mse)
+        scores["MSE"] = np.append(scores["MSE"], mse)
 
-    return reg, mses
+    return reg, scores

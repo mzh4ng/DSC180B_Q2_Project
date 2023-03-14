@@ -26,14 +26,15 @@ def plot_classification(config, auroc, aupr):
 
 
 def plot_regression(config, mses):
-    file = "figures/" + config["experiment_name"]
+    folder = "figures/" + config["experiment_name"]
     title = config["experiment_title"]
+    file = folder + "/" + config["experiment_name"]
     plot_boxplot(title + " MSE", file + "_MSE.png", mses)
 
 
-def plot_boxplot(title, file_name, dict):
-    data = list(dict.values())
-    ticks = list(dict.keys())
+def plot_boxplot(title, file_name, data_dict):
+    data = list(data_dict.values())
+    ticks = list(data_dict.keys())
 
     fig = plt.figure()
     ax = fig.add_axes([0.1, 0.1, 0.75, 0.75])
