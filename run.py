@@ -5,7 +5,7 @@ import pandas as pd
 
 from src.dataset import make_dataset
 from src.preprocessing import data_cleaning
-from src.preprocessing import preprocessing
+from src.preprocessing import build_features
 from src.models import train_model
 from src.visualizations import visualize
 
@@ -46,7 +46,7 @@ def pca(args):
     metadata.drop(target_column, axis=1)
 
     # preprocess metadata
-    metadata = preprocessing.preprocess_metadata(config, metadata)
+    metadata = build_features.preprocess_metadata(config, metadata)
     metadata = metadata.iloc[:, :-7]
 
     # merge counts data to metadata (drop any counts missing from index in metadata)
@@ -71,7 +71,7 @@ def main(config):
 
     # preprocess metadata and combine counts and metadata
     if config["preprocessing"]["do_preprocessing"]:
-        X, Y = preprocessing.preprocess(config, metadata, counts)
+        X, Y = build_features.preprocess(config, metadata, counts)
     else:
         Y = metadata[config["dataset"]["y_col"]]
         X = pd.merge(metadata, counts, on=config["dataset"]["counts_id_col"], how="inner")

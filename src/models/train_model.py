@@ -82,8 +82,8 @@ def train_regression(config, X, y):
 
     reg = Lasso(alpha)
 
+    # dict of score metrics
     scores = {}
-
     scores["MSE"] = np.array([])
 
     for train_index, val_index in skf.split(X, y):
