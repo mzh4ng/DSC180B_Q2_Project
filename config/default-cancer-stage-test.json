@@ -1,12 +1,12 @@
 {
-  "experiment_name": "default-cancer-stage",
+  "experiment_name": "default-cancer-stage-test",
   "experiment_title": "Cancer Stage Classification",
   "experiment_type": "classification",
   "save_model": true,
   "overwrite_save": true,
   "dataset": {
-    "metadata_file_path": "data/metadata_species_WIS_overlapping_fungi_bacteria_12773samples.tsv",
-    "counts_file_path": "data/count_data_species_raw_WIS_overlapping_fungi_bacteria_12773samples.tsv",
+    "metadata_file_path": "data/test/test_metadata.tsv",
+    "counts_file_path": "data/test/test_fungi.tsv",
     "metadata_id_col": "dz",
     "counts_id_col": "sampleid",
     "y_col": "pathologic_stage_label"

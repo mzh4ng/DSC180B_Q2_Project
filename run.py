@@ -1,9 +1,7 @@
 import sys
 import json
-import os
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
 
 from src.dataset import make_dataset
 from src.preprocessing import build_features
@@ -13,7 +11,7 @@ from src.models import train_model
 from src.visualizations import visualize
 
 
-def main(args):
+def main2(args):
     if "test" in args:
         metadata_filename = "data/test/test_metadata.tsv"
         counts_filename = "data/test/test_fungi.tsv"
@@ -39,11 +37,11 @@ def main(args):
 
         Y = build_features.OHE_col(metadata[cancer_stage])
         X = metadata.drop(cancer_stage, axis=1)
-        X = preprocessing.preprocess_metadata(X)
+        X = preprocessing.preprocess_metadata(config, X)
         X = pd.merge(X, counts, on="sampleid", how="inner")
 
         print("Training Model Now . . .")
-        model, auroc_plt_data, aupr_plt_data = train_model.train_classify_cancer_stages(X, Y)
+        model, auroc_plt_data, aupr_plt_data = train_model.train_classification(config, X, Y)
 
         visualize.init_visualization(Y)
         i = 1
@@ -66,14 +64,14 @@ def main(args):
         # X = pd.merge(X, counts, on="sampleid", how="inner")
 
         print("Training Model Now . . .")
-        model, mses = train_model.train_regression(counts, Y)
+        model, mses = train_model.train_regression(config, counts, Y)
 
         # TODO: visualize MSEs
 
         print("Average MSE for Days to Die Regression:" + str(np.mean(mses)))
 
         return model, mses
-    
+
     if "pca" in args:
         target_column = sys.argv[2]
 
@@ -86,15 +84,15 @@ def main(args):
         metadata = metadata[metadata.experimental_strategy == 'WGS']
 
         # order by cancer stage
-        metadata['pathologic_stage_label'] = pd.Categorical(metadata['pathologic_stage_label'], categories = stages)
-        metadata = metadata.sort_values(by = 'pathologic_stage_label')
+        metadata['pathologic_stage_label'] = pd.Categorical(metadata['pathologic_stage_label'], categories=stages)
+        metadata = metadata.sort_values(by='pathologic_stage_label')
 
         # remove cancer stage from pca (keep for coloring plot later)
         targets = metadata[[target_column]]
-        metadata.drop(target_column, axis = 1)
+        metadata.drop(target_column, axis=1)
 
         # preprocess metadata
-        metadata = preprocessing.preprocess_metadata(metadata)
+        metadata = preprocessing.preprocess_metadata(config, metadata)
         metadata = metadata.iloc[:, :-7]
 
         # merge counts data to metadata (drop any counts missing from index in metadata)
@@ -110,11 +108,31 @@ def main(args):
         # print(pca[0][:5])
 
 
+def main(config):
+    # load data into memory
+    counts = make_dataset.read_fungi_data(config["dataset"]["counts_file_path"])
+    metadata = make_dataset.read_fungi_data(config["dataset"]["metadata_file_path"])
+
+    # preprocess metadata and combine counts and metadata
+    if config["preprocessing"]["do_preprocessing"]:
+        X, Y = preprocessing.preprocess(config, metadata, counts)
+    else:
+        Y = metadata[config["dataset"]["y_col"]]
+        X = pd.merge(metadata, counts, on=config["dataset"]["counts_id_col"], how="inner")
+
+    # train model and visualize
+    print("Training Model Now . . .")
+    if config["experiment_type"] == "classification":
+        model, auroc_plt_data, aupr_plt_data = train_model.train_classification(config, X, Y)
+        visualize.plot_classification(config, auroc_plt_data, aupr_plt_data)
+    if config["experiment_type"] == "regression":
+        model, mses = train_model.train_regression(config, X, Y)
+        visualize.plot_regression(config, mses)
+
+
 if __name__ == "__main__":
-    # args:
-    # test = use test dataset
-    # dtd = days to death regression
-    # cs = cancer stage classification
     args = sys.argv[1:]
-    main(args)
-    #generates graph in final_figure.png
+    config_name = "config/" + args[0]
+    with open(config_name, "r") as jsonfile:
+        config = json.load(jsonfile)
+    main(config)
