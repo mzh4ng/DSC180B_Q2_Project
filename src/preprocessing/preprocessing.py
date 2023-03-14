@@ -34,7 +34,7 @@ from sklearn.impute import SimpleImputer
 
 ohe_feats = [           'experimental_strategy', 'gender', 'race', 'ethnicity', 'disease_type', 'primary_site',
                         'reference_genome', 'data_submitting_center_label', 'investigation', 'country_of_sample_procurement', 
-                        'pathologic_t_label', 'pathologic_n_label', 'PlateCenterFlag', 'sample_type']
+                        'pathologic_n_label', 'PlateCenterFlag', 'sample_type']
 ordinal_feats = [       'tissue_source_site_label', 'histological_diagnosis_label']
 scaler_feats = [        'analyte_amount', 'analyte_A260A280Ratio', 'aliquot_concentration']
 passthrough_feats = [   'age_at_diagnosis', 'days_to_death']
@@ -43,7 +43,7 @@ drop_feats = [          'sample_name', 'run_prefix', 'cgc_base_name',
                         'data_subtype', 'tcga_sample_id', 'cgc_case_uuid', 'cgc_platform',
                         'gdc_file_uuid', 'cgc_sample_uuid',
                         'cgc_aliquot_uuid', 'tcga_aliquot_id',
-                        'tcga_case_id', 'knightlabID', 'portion_is_ffpe', 'PlateCenter']
+                        'tcga_case_id', 'knightlabID', 'portion_is_ffpe', 'pathologic_t_label', 'PlateCenter']
 
 def preprocess_metadata(df):
 

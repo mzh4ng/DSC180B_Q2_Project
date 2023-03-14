@@ -29,7 +29,7 @@ def train_classify_cancer_stages(dataset, cancer_stages):
     max_depth = 3
     clf_random = 1  # DO NOT TOUCH
 
-    skf = StratifiedKFold(n_splits=n_splits, random_state=skf_random, shuffle=shuffle)
+    skf = StratifiedKFold(n_splits=n_splits, random_state=skf_random, shuffle=True)
 
     clf = GradientBoostingClassifier(loss=loss, learning_rate=learning_rate, n_estimators=n_estimators,
                                      max_depth=max_depth, random_state=clf_random)
