@@ -20,8 +20,8 @@ def pca(args):
         metadata_filename = 'data/metadata_species_WIS_overlapping_fungi_bacteria_12773samples.tsv'
 
     # load fungi counts and metadata into
-    counts = make_dataset.read_fungi_data(counts_filename)
-    raw_metadata = make_dataset.read_fungi_data(metadata_filename)
+    counts = make_dataset.read_data_file(counts_filename)
+    raw_metadata = make_dataset.read_data_file(metadata_filename)
 
     metadata = raw_metadata.replace('Not available', np.nan)
     for col in ['pathologic_t_label', 'pathologic_n_label', 'pathologic_stage_label']:
@@ -66,8 +66,8 @@ def main(config):
     """
     """
     # load data into memory
-    counts = make_dataset.read_fungi_data(config["dataset"]["counts_file_path"])
-    metadata = make_dataset.read_fungi_data(config["dataset"]["metadata_file_path"])
+    counts = make_dataset.read_data_file(config["dataset"]["counts_file_path"])
+    metadata = make_dataset.read_data_file(config["dataset"]["metadata_file_path"])
 
     # preprocess metadata and combine counts and metadata
     if config["preprocessing"]["do_preprocessing"]:
