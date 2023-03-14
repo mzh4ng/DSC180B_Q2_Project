@@ -24,14 +24,19 @@
 
 import numpy as np
 import pandas as pd
-from src.preprocessing import data_cleaning
-from src.preprocessing import build_features
 
+from src.preprocessing import data_cleaning
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
+
+
+def OHE_col(col):
+    """
+    """
+    return pd.get_dummies(col)
 
 
 def preprocess_metadata(config, df):
@@ -80,7 +85,7 @@ def preprocess(config, raw_metadata, counts):
         metadata = metadata[metadata[config["dataset"]["y_col"]].isin(["Stage I", "Stage II", "Stage III", "Stage IV"])]
         Y = Y.loc[metadata.index]
         if config["preprocessing"]["y_col_OHE"]:
-            Y = build_features.OHE_col(Y)
+            Y = OHE_col(Y)
     if config["experiment_type"] == "regression":
         # constrain range by dropping outliers and NaNs from Y
         metadata = data_cleaning.filter_metadata(metadata)

@@ -6,7 +6,7 @@ import os
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-# Default font family for graphs
+# Set default font for graphs
 font = {'family': 'DejaVu Sans',
         'weight': 'bold',
         'size': 15}
