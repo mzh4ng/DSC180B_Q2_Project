@@ -12,7 +12,7 @@ stages(I-IV) as opposed to cancer types in the original study.
 
 INSTRUCTIONS:
 To run these models, run the run.py file with 1 argument, the name of the config file for the desired model. 
-Ex. "run.py default-cancer-stage.json"
+Ex. "run.py default-cancer-stage.json".
 Additionally, there is a notebook in the path notebooks/run.ipynb that can be used to run this program in 
 Jupyter Notebook if desired.
 
@@ -22,12 +22,12 @@ only has 1 config file that it uses to increase the customization of experiments
 too many config files.
 
 In each config file, there are 3 subcategories: dataset, preprocessing, and model.
-    Dataset specifies information about the raw feature tables including which column is the target variable.
-    Preprocessing specifies the parameters of the preprocessing including what transformations to apply to each column. 
+<br /> Dataset specifies information about the raw feature tables including which column is the target variable.
+<br /> Preprocessing specifies the parameters of the preprocessing including what transformations to apply to each column. 
     Preprocessing can also be turned off if data is already preprocessed with "do_preprocessing".
-    Model specifies the parameters of the model as well as cross validation. These are model specific and will vary
+<br /> Model specifies the parameters of the model as well as cross validation. These are model specific and will vary
     based upon which type of model is being used.
-Additionally, these are some important keys in the config file:
-    experiment_name: Specifies the unique id of the experiment. This is important for separating plots in figures.
-    experiment_title: Title of the experiment that will be displayed on the graphs
-    experiment_type: internal parameter telling the pipeline which class of model to use (classification or regression)
+<br /> Additionally, these are some important keys in the config file:
+<br /> experiment_name: Specifies the unique id of the experiment. This is important for separating plots in figures.
+<br /> experiment_title: Title of the experiment that will be displayed on the graphs
+<br /> experiment_type: internal parameter telling the pipeline which class of model to use (classification or regression)
