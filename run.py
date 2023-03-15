@@ -16,7 +16,7 @@ def main(config):
     Loads data into memory, and then preprocess it if specified. Then, trains the model and plots the relevant scores.
 
     Input: dictionary config file
-    Output: None
+    Output: Fitted model of the last K-Fold
     """
     # load data into memory
     counts = make_dataset.read_data_file(config["dataset"]["counts_file_path"])
@@ -38,6 +38,7 @@ def main(config):
         model, mses = train_model.train_regression(config, X, Y)
         visualize.plot_regression(config, mses)
     print("Task Completed.")
+    return model
 
 
 if __name__ == "__main__":
