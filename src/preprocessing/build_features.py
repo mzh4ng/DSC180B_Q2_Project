@@ -1,27 +1,3 @@
-# experimental_strategy          - ohe
-# analyte_amount                 - numerical (normalize?)
-# analyte_A260A280Ratio          - numerical (contains zero?)
-# aliquot_concentration          - numerical (omit 2.10 value)
-# gender                         - ohe (55 nan)
-# race                           - ohe (1462 nan, keep)
-# ethnicity                      - ohe (3096 nan, keep)
-# disease_type                   - ohe
-# sample_type                    - ordinal [['Primary Tumor', 'Recurrent Tumor', 'Additional - New Primary', 'Metastatic', 'Blood Derived Normal', 'Solid Tissue Normal']]
-# primary_site                   - ohe
-# age_at_diagnosis               - numerical
-# reference_genome               - ohe
-# data_submitting_center_label   - ohe
-# investigation                  - ohe
-# days_to_death                  - numerical
-# tissue_source_site_label       - ordinal (avoid ohe, 179 unique vals)
-# country_of_sample_procurement  - ohe
-# pathologic_t_label             - ohe (reduce stages?)
-# pathologic_n_label             - ohe (reduce stages?)
-# histological_diagnosis_label   - ordinal (avoid ohe, 71 unique vals)
-# pathologic_stage_label         - ohe (reduce stages)
-# PlateCenter                    - numerical
-# PlateCenterFlag                - ohe
-
 import numpy as np
 import pandas as pd
 

@@ -10,5 +10,13 @@ FROM $BASE_CONTAINER
 
 LABEL maintainer="UC San Diego ITS/ETS <ets-consult@ucsd.edu>"
 
+RUN pip install numpy==1.22
+
+RUN pip install matplotlib==3.7.1
+
+RUN pip install scikit-learn==1.2.1
+
+RUN pip install pandas==1.5.3
+
 # Override command to disable running jupyter notebook at launch
 CMD ["/bin/bash"]

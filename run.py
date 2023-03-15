@@ -34,9 +34,11 @@ def main(config):
     if config["experiment_type"] == "classification":
         model, auroc_plt_data, aupr_plt_data = train_model.train_classification(config, X, Y)
         visualize.plot_classification(config, auroc_plt_data, aupr_plt_data)
-    if config["experiment_type"] == "regression":
+    elif config["experiment_type"] == "regression":
         model, mses = train_model.train_regression(config, X, Y)
         visualize.plot_regression(config, mses)
+    else:
+        raise Exception("Experiment type not recognized. Please check the config file")
     print("Task Completed.")
     return model
 
