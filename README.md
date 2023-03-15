@@ -27,7 +27,8 @@ In each config file, there are 3 subcategories: dataset, preprocessing, and mode
     Preprocessing can also be turned off if data is already preprocessed with "do_preprocessing".
 <br /> Model specifies the parameters of the model as well as cross validation. These are model specific and will vary
     based upon which type of model is being used.
-<br /> Additionally, these are some important keys in the config file:
+
+Additionally, these are some important keys in the config file:
 <br /> experiment_name: Specifies the unique id of the experiment. This is important for separating plots in figures.
 <br /> experiment_title: Title of the experiment that will be displayed on the graphs
 <br /> experiment_type: internal parameter telling the pipeline which class of model to use (classification or regression)
