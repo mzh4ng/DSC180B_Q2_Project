@@ -3,3 +3,5 @@
 .idea
 __pycache__
 src/__init__.pyc
+_pages
+_site
