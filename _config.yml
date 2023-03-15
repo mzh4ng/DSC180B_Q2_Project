@@ -9,8 +9,8 @@ description: >
 version:          1.0
 gitbook_version:  3.2.3
 
-url:              'https://benjaminsacks.github.io'
-baseurl:          '/capstone-website'
+url:              'https://mzh4ng.github.io'
+baseurl:          '/DSC180B_Q2_Project'
 rss:              RSS
 
 # bootstrap: use the remote theme for the site itself
