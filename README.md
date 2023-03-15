@@ -5,175 +5,99 @@ permalink: /
 cover: /DSC180B_Q2_Project/assets/microbiome.png
 ---
 
-Make Jelly site have a GitBook look!
+# Introduction
 
+Each year, an estimated two million Americans receive a cancer diagnosis. Patient characteristics such as age, gender, and general health status can impact cancer progression and response to treatment modalities like chemotherapy. Nonetheless, a crucial yet often overlooked element that may hold significant sway is the patient's microbiome. While humans possess approximately 20,000 genes in our DNA, we also harbor a substantial number of microbial genes, ranging from 2 to 20 million throughout our various bodily microbiomes. 
 
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/human-vs-microbes.png){:class="img-responsive"}{: width="400" }
+{: refdef}
 
-[![Jekyll Themes](https://img.shields.io/badge/featured%20on-JekyllThemes-red.svg)](https://jekyll-themes.com/jekyll-gitbook/)
+Furthermore, despite a 99.99% DNA similarity between two strangers, their gut microbiomes may only share 10% similarity. In numerous instances, the microbiome composition dictates medication efficacy and disease susceptibility. For example, one study investigated the effectiveness of Cordyceps militaris extract in overcoming carboplatin resistance in ovarian cancer and found that the extract reduced the viability of carboplatin-resistant SKOV-3 cells and induced apoptosis. (Jo et al.) 
 
-## Why Jekyll with GitBook
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](https://cdn.shopify.com/s/files/1/0514/0101/products/2008-12-14_Cordyceps_militaris_3107128906.jpg?v=1551741041){:class="img-responsive"}{: width="400" }
+{: refdef}
 
-GitFuck is an amazing frontend style to present and organize contents (such as book chapters
-and blogs) on Web. The typical to deploy GitBook at [Github Pages][1]
-is building HTML files locally and then push to Github repository, usually to the `gh-pages`
-branch. It's quite annoying to repeat such workload and make it hard for people do version
-control via git for when there are generated HTML files to be staged in and out.
+Consequently, it is plausible that mycobiomes might partly contribute to the differential cancer progression rates observed in some individuals.
 
-This theme takes style definition out of generated GitBook site and provided the template
-for Jekyll to rendering markdown documents to HTML, thus the whole site can be deployed
-to [Github Pages][1] without generating and uploading HTML bundle every time when there are
-changes to the original repo.
+## Literature Review and Discussion of Prior Work
 
-## How to Get Started
+In the past, researchers have found that bacteria microbes were present in over 1500 tumors spanning seven types of cancer (Nejman et al). The study identified both cancer cells and immune cells as being sites for microbiomes, and that the bacterial composition varied by cancer type. Following this, researchers at the University of California, San Diego re-examined sequencing studies in The Cancer Genome Atlas (TCGA) of 33 types of cancer from treatment-naive patients (a total of 18,116 samples) for microbial reads (Poore et al). They found that they could diagnose cancer type in individuals with stage Ia–IIc cancer and cancers lacking any genomic alterations. 
 
-This theme can be used just as other [Jekyll themes][1] and support [remote theme][12],
-see [the official guide][13] as well.
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/poore.jpg){:class="img-responsive"}
 
-You can introduce this jekyll theme into your own site by either
+Furthermore, they were able to distinguish between healthy individuals and individuals with multiple cancers solely using microbial signatures. Additionally, a paper published earlier this year also found that multi-kingdom microbiota was effective at diagnosing colorectal cancer (Liu et al). 
 
-- [Fork][3] this repository and add your markdown posts to the `_posts` folder.
-- Use as a remote theme in your [`_config.yml`][14](just like what we do for this
-  site itself),
+The study that we based our research off of for this project was the pan-cancer analysis which revealed cancer-type-specific fungal ecologies (Poore et al.). In this study mycobial data sourced from TCGA was used to distinguish between multiple types of cancers tumors. However, this study had intentionally left out metadata from the analysis in order to emphasize mycobial community impact. Our goal for this project was to see if the reintroduction of the metadata could have a positive impact on identifying pathological stage and the days between diagnosis and death for individuals with various cancers.
 
-```yaml
-remote_theme: sighingnow/jekyll-gitbook
-```
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](https://www.uab.edu/news/media/k2/items/cache/e84ec87f15dcc0ea491d4bb9e6b133bd_XL.jpg){:class="img-responsive"}{: height="200"}
+![Comparing Human Gene Count to Microbial Count](https://tasteforlife.com/sites/default/files/styles/facebook/public/conditions-wellness/digestion/meet-your-mycobiome/meet-your-mycobiome.jpg?itok=dsf3ktmf){:class="img-responsive"}{: height="200"}
+{: refdef}
 
-### Deploy Locally with Jekyll Serve
+# Methods
 
-This theme can be ran locally using Ruby and Gemfiles.
+## Data Cleaning and Preprocessing
 
-[Testing your GitHub Pages site locally with Jekyll](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll) - GitHub
+First, we obtained 2 feature tables from the original study examining cancer type classification. These feature tables consisted of the final, cleaned TCGA fungal counts and metadata used in the study with 12773 total samples. Next, we preprocessed the metadata using a combination of One Hot Encoding, Ordinal Encoding, Scaler, passthrough, and dropping features. For days to death regression specifically, we filtered outliers greater than 10,000 days to prevent them from skewing the data. We then imputed missing values, which were primarily from the passthrough features, with the column mean and combined the transformed metadata table with the fungal counts table. Lastly, we consolidated certain columns, such as `pathologic_stage_label`, down to a handful of categorgies effectively eliminating substages. This proved to be useful in both of our models.
 
-## Full-text search
+## Regression
 
-The search functionality in jekyll-gitbook theme is powered by the [gitbook-plugin-search-pro][5] plugin and is enabled by default.
+For regression, we used scikit-learn to run lasso ridge regression with 10-folds cross validation on both the fungal data and preprocessed metadata to predict the patients days to death. We tried out other regression models as well including simple linear regression, bayesian regression, and decision tree regression as well. The parameter for our primary model, lasso was an alpha of 0.1
 
-[https://sighingnow.github.io/jekyll-gitbook/?q=generated](https://sighingnow.github.io/jekyll-gitbook/?q=generated)
+## Classification
 
-## Code highlight
+For classification, we made a gradient boosting classifier with stratified 10-folds cross validation using scikit-learn. For the gradient boost classifier, we used exponential loss, learning rate of 0.1, n-estimators 150, and max depth of 3.
 
-The code highlight style is configurable the following entry in `_config.yaml`:
+# Results and Conclusions
 
-```yaml
-syntax_highlighter_style: colorful
-```
+## Results
 
-The default code highlight style is `colorful`, the full supported styles can be found from [the rouge repository][6]. Customized
-style can be added to [./assets/gitbook/rouge/](./assets/gitbook/rouge/).
+### Regression
 
-## How to generate TOC
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/regression.png){:class="img-responsive"}{: width="400" }
+{: refdef}
 
-The jekyll-gitbook theme leverages [jekyll-toc][4] to generate the *Contents* for the page.
-The TOC feature is not enabled by default. To use the TOC feature, modify the TOC
-configuration in `_config.yml`:
+For our regression model, we found that the bayesian and decision tree models performed much better than the lasso ridge regression and linear regression, when comparing the mean squared errors.
 
-```yaml
-toc:
-    enabled: true
-    h_min: 1
-    h_max: 3
-```
+### Classification
 
-## Google Analytics, etc.
+In our results, we generated AUROC and AUPR plots for our classification of cancer stage. AUROC is the area under the receiver operator characteristic curve, which essentially shows our true positive rate. The AUPR plot, or the area under the precision recall curve shows the precision of our classifier. 
 
-The jekyll-gitboook theme supports embedding the [Google Analytics][7], [CNZZ][8] and [Application Insights][9] website analytical tools with the following
-minimal configuration in `_config.yaml`:
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](https://github.com/mzh4ng/DSC180B_Q2_Project/blob/main/figures/default-cancer-stage/default-cancer-stage_AUPR.png?raw=true){:class="img-responsive"}{: height="250"}
+![Comparing Human Gene Count to Microbial Count](https://github.com/mzh4ng/DSC180B_Q2_Project/blob/main/figures/default-cancer-stage/default-cancer-stage_AUROC.png?raw=true){:class="img-responsive"}{: height="250"}
+{: refdef}
 
-```yaml
-tracker:
-  google_analytics: "<YOUR GOOGLE ANALYTICS KEY, e.g, UA-xxxxxx-x>"
-```
+### PCoA
 
-Similarly, CNZZ can be added with the following configuration in `_config.yaml`
+We generated two Principal Coordinate Analysis plots, showing the separation between stages as well as the separation between disease types by a euclidean distance metric. We can see some similar clustering when comparing the two plots, indicating there likely being a relation between the cancer stage and the specific cancer type. This could be a confounding caused by the way that the data was collected, and may be something to explore in further research if there is more data. 
 
-```yaml
-tracker:
-  cnzz: "<YOUR CNZZ ANALYTICS KEY, e.g., xxxxxxxx>"
-```
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](https://github.com/mzh4ng/DSC180B_Q2_Project/blob/main/figures/pca/PCA_pathologic_stage_label.png?raw=true){:class="img-responsive"}{: width="350"}
+![Comparing Human Gene Count to Microbial Count](https://github.com/mzh4ng/DSC180B_Q2_Project/blob/main/figures/pca/PCA_disease_type.png?raw=true){:class="img-responsive"}{: width="350"}
+{: refdef}
 
-Application Insights can be added with the following configuration in `_config.yaml`
+### Feature Weights
 
-```yaml
-tracker:
-  application_insights: "<YOUR APPLICATION INSIGHTS CONNECTION STRING>"
-```
+Finally, we generated bar plots showing the features that had the greatest importance in our classification model. Overall the feature importance for all the stages was relatively similar, but there were some differences especially when comparing between stage I and stage IV.
 
-## Extra StyleSheet or Javascript elements
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/stage1.png){:class="img-responsive"}{: height="250"}
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/stage2.png){:class="img-responsive"}{: height="250"}
+{: refdef}
 
-You can add extra CSS or JavaScript references using configuration collections:
+{:refdef: style="text-align: center;"}
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/stage3.png){:class="img-responsive"}{: height="250"}
+![Comparing Human Gene Count to Microbial Count](/DSC180B_Q2_Project/assets/stage4.png){:class="img-responsive"}{: height="250"}
+{: refdef}
 
-- extra_css: for additional style sheets. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-- extra_header_js: for additional scripts to be included in the `<head>` tag, after the `extra_css` has been added. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
-- extra_footer_js: for additional scripts to be included at the end of the HTML document, just before the site tracking script. If the url does not start by http, the path must be relative to the root of the site, without a starting `/`.
+## Discussion
 
-## Customizing font settings
+Our study successfully achieved a high level of accuracy in classifying the stage of various cancer tumors using a combination of metadata and counts data. Notably, the inclusion of metadata in our model increased model performance compared to the original study. However, the features that our model identified as most important did not include any microbial features. It is possible that the microbial features each had a relatively small effect on the model, making them less significant than the metadata. Future studies may want to investigate methods to boost the impact of microbial features.
 
-The fonts can be customized by modifying the `.book.font-family-0` and `.book.font-family-1` entry in [`./assets/gitbook/custom.css`][10],
+Reducing the number of cancer stages to four may have contributed to our model's performance by reducing the risk of inaccuracy in attempting to classify too many stages.
 
-```css
-.book.font-family-0 {
-    font-family: Georgia, serif;
-}
-.book.font-family-1 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-```
-
-## Tips, Warnings and Dangers blocks
-
-The jekyll-gitbook theme supports customized kramdown attributes (`{: .block-tip }`, `{: .block-warning }`,
-`{: .block-danger }`) like that displayed in [the discord.js website][11]. The marker can be used like
-
-```markdown
-> ##### TIP
->
-> This guide is last tested with @napi-rs/canvas^0.1.20, so make sure you have
-> this or a similar version after installation.
-{: .block-tip }
-```
-
-Rendered page can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-06-30-tips_warnings_dangers.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-06-30-tips_warnings_dangers.html)
-
-## Cover image inside pages
-
-The jekyll-gitbook theme supports adding a cover image to a specific page by adding
-a `cover` field to the page metadata:
-
-```diff
-  ---
-  title: Page with cover image
-  author: Tao He
-  date: 2022-05-24
-  category: Jekyll
-  layout: post
-+ cover: /assets/jekyll-gitbook/dinosaur.gif
-  ---
-```
-
-The effect can be previewed from
-
-[https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-05-24-page_cover.html](https://sighingnow.github.io/jekyll-gitbook/jekyll/2022-05-24-page_cover.html)
-
-## License
-
-This work is open sourced under the Apache License, Version 2.0.
-
-Copyright 2019 Tao He.
-
-[1]: https://pages.github.com
-[2]: https://pages.github.com/themes
-[3]: https://github.com/sighingnow/jekyll-gitbook/fork
-[4]: https://github.com/allejo/jekyll-toc
-[5]: https://github.com/gitbook-plugins/gitbook-plugin-search-pro
-[6]: https://github.com/rouge-ruby/rouge/tree/master/lib/rouge/themes
-[7]: https://analytics.google.com/analytics/web/
-[8]: https://www.cnzz.com/
-[9]: https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
-[10]: https://github.com/sighingnow/jekyll-gitbook/blob/master/gitbook/custom.css
-[11]: https://discordjs.guide/popular-topics/canvas.html#setting-up-napi-rs-canvas
-[12]: https://rubygems.org/gems/jekyll-remote-theme
-[13]: https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-a-theme-to-your-github-pages-site-using-jekyll
-[14]: https://github.com/sighingnow/jekyll-gitbook/blob/master/_config.yml
+Additionally, our regression model for predicting days to death was a novel concept not attempted in the original study. Despite utilizing only metadata and counts data, we achieved respectable accuracy levels in our predictions.
