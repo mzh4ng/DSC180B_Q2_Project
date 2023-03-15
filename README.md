@@ -2,7 +2,7 @@
 layout: home
 title: Evaluating Fungal Feature Importance in Predicting Life Expectancy for Cancer Patients
 permalink: /
-cover: /capstone-website/assets/microbiome.png
+cover: /DSC180B_Q2_Project/assets/microbiome.png
 ---
 
 Make Jelly site have a GitBook look!
