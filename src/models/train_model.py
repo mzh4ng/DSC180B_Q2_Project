@@ -8,6 +8,17 @@ from sklearn.metrics import average_precision_score, roc_auc_score, mean_squared
 
 def train_classification(config, X, Y):
     """
+    Trains a classification model using Stratified K-Folds Cross Validation and Gradient Boost Classifier
+    and then plots AUROC and AUPR. Parameters can be specified in the config file.
+
+    Inputs:
+        config: dictionary config file
+        X: pandas Dataframe feature table
+        Y: pandas Dataframe of One Hot Encoded target variable
+    Outputs:
+        clf: fitted GBF model for the last K-Fold
+        total_auroc_data: dictionary of AUROC scores
+        total_aupr_data: dictionary of AUPR scores
     """
     # cross validation hyperparams
     n_splits = config["model"]["k-folds"]["n_splits"]
@@ -66,6 +77,16 @@ def train_classification(config, X, Y):
 
 def train_regression(config, X, y):
     """
+    Trains a classification model using K-Folds and Gradient Boost Classifier and then plots AUROC and AUPR.
+    Parameters can be specified in the config file.
+
+    Inputs:
+        config: dictionary config file
+        X: pandas Dataframe feature table
+        Y: pandas Series of target variable
+    Outputs:
+        reg: fitted Regression model for the last K-Fold
+        scores: dictionary of MSE scores
     """
 
     # cross validation hyperparams

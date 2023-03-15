@@ -14,6 +14,10 @@ font = {'family': 'DejaVu Sans',
 
 def make_folder(name):
     """
+    Makes a folder with given name if it does not already exist
+
+    Input: name of the folder to be created
+    Output: None
     """
     if not os.path.exists(name):
         os.makedirs(name)
@@ -21,6 +25,13 @@ def make_folder(name):
 
 def plot_classification(config, auroc, aupr):
     """
+    Creates boxplots of the AUROC and AUPR scores and saves them in the "figures" folder under the experiment's name.
+
+    Input:
+        config: dictionary config file
+        auroc: dictionary of auroc scores
+        aupr: dictionary of aupr scores
+    Output: None
     """
     folder = "figures/" + config["experiment_name"]
     title = config["experiment_title"]
@@ -32,6 +43,12 @@ def plot_classification(config, auroc, aupr):
 
 def plot_regression(config, mses):
     """
+    Creates boxplots of the MSE scores and saves them in the "figures" folder under the experiment's name.
+
+    Input:
+        config: dictionary config file
+        mses: dictionary of mean squared error scores
+    Output: None
     """
     folder = "figures/" + config["experiment_name"]
     title = config["experiment_title"]
@@ -42,6 +59,13 @@ def plot_regression(config, mses):
 
 def plot_boxplot(title, file_name, data_dict):
     """
+    Creates a boxplot with a title and axes.
+
+    Inputs:
+        title: string of the title of the plot
+        file_name: name of the file the plot will be saved in
+        data_dict: dictionary of data to be plotted
+    Output: matlibplot figure object of the boxplot
     """
     data = list(data_dict.values())
     ticks = list(data_dict.keys())

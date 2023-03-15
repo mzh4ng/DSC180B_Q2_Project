@@ -64,6 +64,11 @@ def pca(args):
 
 def main(config):
     """
+    Main function to run the ML pipeline. Pipeline tuned based upon the inputted config file.
+    Loads data into memory, and then preprocess it if specified. Then, trains the model and plots the relevant scores.
+
+    Input: dictionary config file
+    Output: None
     """
     # load data into memory
     counts = make_dataset.read_data_file(config["dataset"]["counts_file_path"])
@@ -88,8 +93,6 @@ def main(config):
 
 
 if __name__ == "__main__":
-    """
-    """
     args = sys.argv[1:]
     config_name = "config/" + args[0]
     with open(config_name, "r") as jsonfile:

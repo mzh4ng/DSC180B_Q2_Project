@@ -3,6 +3,12 @@ import pandas as pd
 
 def filter_metadata(df):
     """
+    Filters the metadata of outliers for days to death and strange values for analyte_A260A280Ratio
+    and aliquot_concentration.
+
+    Input: pandas Dataframe of metadata feature table
+    Output: pandas Dataframe of filtered metadata feature table
+
     """
     df = df[df['days_to_death'] < 10_000]  # Drop NaN's & outliers
     df = df[
@@ -14,6 +20,12 @@ def filter_metadata(df):
 
 
 def reduce_stages(col):
+    """
+    Takes substages and coverts them into their primary stage ex. Stage IA to Stage I.
+
+    Input: pandas Series or Dataframe column
+    Output: pandas Series or Dataframe column after transformation
+    """
     stage_dict = {'Stage IA': 'Stage I',
                   'Stage IB': 'Stage I',
                   'Stage IS': 'Stage I',

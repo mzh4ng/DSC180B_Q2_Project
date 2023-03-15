@@ -35,12 +35,26 @@ from sklearn.impute import SimpleImputer
 
 def OHE_col(col):
     """
+    One hot encodes a column of a dataframe.
+
+    Input: pandas Dataframe column or series
+    Output: pandas Dataframe
     """
     return pd.get_dummies(col)
 
 
 def preprocess_metadata(config, df):
     """
+    Preprocesses the metadata by the following:
+    Drops the target column (Y)
+    Imputes Ordinal columns
+    Performs one of OneHotEncoding, Ordinal Encoding, Scaler, Passthrough, or Drop on columns
+    Further imputes missing values with the mean.
+
+    Inputs:
+        config: dictionary config file
+        df: pandas datframe of raw metadata feature table
+    Output: pandas dataframe of processed metadata
     """
     # drop Y col
     df = df.drop(config["dataset"]["y_col"], axis=1)
@@ -73,6 +87,19 @@ def preprocess_metadata(config, df):
 
 def preprocess(config, raw_metadata, counts):
     """
+    Preprocesses the raw data according to the config through the following:
+    Reduces Cancer Stages such as IIA to II s.t. only Stages I, II, III, and IV remain
+    For regression, filters out metadata according to data_cleaning.filter_metadata
+    Processes metadata according to the preprocess_metadata function
+    Merges counts and metadata feature tables into one
+
+    Inputs:
+        config: dictionary config file
+        raw_metadata: pandas Dataframe of unprocessed metadata feature table
+        counts: pandas Dataframe of unprocessed fungi counts feature table
+    Outputs:
+        X: pandas Dataframe combined feature table
+        Y: pandas Dataframe of target variable
     """
     metadata = raw_metadata.replace('Not available', np.nan)
     for col in config["preprocessing"]["reduce_cancer_stage_cols"]:
