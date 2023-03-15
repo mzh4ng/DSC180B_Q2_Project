@@ -11,6 +11,7 @@ stages(I-IV) as opposed to cancer types in the original study.
 
 
 INSTRUCTIONS:
+
 To run these models, run the run.py file with 1 argument, the name of the config file for the desired model. 
 Ex. "run.py default-cancer-stage.json".
 Additionally, there is a notebook in the path notebooks/run.ipynb that can be used to run this program in 
